@@ -1,0 +1,339 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.baidu.ocrqa.sdk.model">
+
+
+
+    <select id="getGeneralEvalResult" parameterType="String" resultType="com.baidu.ocrqa.sdk.model.mysql.general.GeneralNoPositionEvalResult">
+
+        select * from general where idNo=#{idNo};
+
+    </select>
+    <insert id="generalInsert" parameterType="com.baidu.ocrqa.sdk.model.mysql.general.GeneralNoPositionEvalResult">
+        insert into generalNoPosition (idNo,err,subErr,insertErr,delErr,lineErr,time,version)
+        values (#{idNo},#{err},#{subErr},#{insertErr},#{delErr},#{lineErr},#{time},#{version})
+    </insert>
+
+
+    <insert id="generalWithPositionInsert" parameterType="com.baidu.ocrqa.sdk.model.mysql.general.GeneralWithPostionEvalResult">
+        insert into generalWithPosition (idNo,charLevelRecall,charLevelPrecision,imageLevelRecall,imageLevelPrecision,time,version)
+        values (#{idNo},#{charLevelRecall},#{charLevelPrecision},#{imageLevelRecall},#{imageLevelPrecision},#{time},#{version})
+    </insert>
+
+
+    <select id="getGeneralWithPositionEvalResult" parameterType="String" resultType="com.baidu.ocrqa.sdk.model.mysql.general.GeneralWithPostionEvalResult">
+
+        select * from generalWithPosition where idNo=#{idNo};
+
+    </select>
+
+
+
+    <select id="getGeneralWithPositionEvalResultList" parameterType="Map" resultType="com.baidu.ocrqa.sdk.model.mysql.general.GeneralWithPostionEvalResult">
+
+        select * from generalWithPosition where id &lt;=#{end} and id &gt;=#{start}
+        order by time desc;
+
+
+    </select>
+
+
+    <select id="getGeneralNoPositionEvalResult" parameterType="String" resultType="com.baidu.ocrqa.sdk.model.mysql.general.GeneralNoPositionEvalResult">
+
+        select * from generalNoPosition where idNo=#{idNo};
+
+    </select>
+
+    <select id="getGeneralNoPositionEvalResultList" parameterType="Map" resultType="com.baidu.ocrqa.sdk.model.mysql.general.GeneralNoPositionEvalResult">
+
+        select * from generalNoPosition where id &lt;=#{end} and id &gt;=#{start}
+        order by time desc;
+
+
+    </select>
+
+
+    <insert id="idCardFrontInsert" parameterType="com.baidu.ocrqa.sdk.model.mysql.idcard.IDCardFrontEvalResult">
+        insert into idCardFront
+        (   idNo,
+            birthdayRecall,nameRecall,idNoRecall,sexRecall,nationRecall,addressRecall,
+            birthdayAccuracy,nameAccuracy,idNoAccuracy,sexAccuracy,nationAccuracy,addressAccuracy,
+            time,version
+        )
+        values
+        (
+            #{idNo},
+            #{birthdayRecall},#{nameRecall},#{idNoRecall},#{sexRecall},#{nationRecall},#{addressRecall},
+            #{birthdayAccuracy},#{nameAccuracy},#{idNoAccuracy},#{sexAccuracy},#{nationAccuracy},#{addressAccuracy},
+            #{time},#{version}
+        )
+    </insert>
+
+    <select id="getCardFrontEvalResult" parameterType="String" resultType="com.baidu.ocrqa.sdk.model.mysql.idcard.IDCardFrontEvalResult">
+
+        select * from idCardFront where idNo=#{idNo};
+
+    </select>
+
+    <select id="getIDCardFrontEvalResultList" parameterType="Map" resultType="com.baidu.ocrqa.sdk.model.mysql.idcard.IDCardFrontEvalResult">
+
+        select * from idCardFront where id &lt;=#{end} and id &gt;=#{start}
+        order by time desc;
+
+
+    </select>
+
+
+    <select id="getIDCardBackEvalResultList" parameterType="Map" resultType="com.baidu.ocrqa.sdk.model.mysql.idcard.IDCardBackEvalResult">
+
+    select * from idCardBack where id &lt;=#{end} and id &gt;=#{start}
+    order by time desc;
+    </select>
+
+
+
+    <insert id="idCardBackInsert" parameterType="com.baidu.ocrqa.sdk.model.mysql.idcard.IDCardBackEvalResult">
+        insert into idCardBack (
+        idNo,issuingDateRecall,issuingAuthorityRecall,expiryDateRecall,
+        issuingDateAccuracy,issuingAuthorityAccuracy,expiryDateAccuracy,
+        time,version)
+        values
+        (#{idNo},#{issuingDateRecall},#{issuingAuthorityRecall},#{expiryDateRecall},
+        #{issuingDateAccuracy},#{issuingAuthorityAccuracy},#{expiryDateAccuracy},
+        #{time},#{version})
+    </insert>
+
+
+    <select id="getCardBackEvalResult" parameterType="String" resultType="com.baidu.ocrqa.sdk.model.mysql.idcard.IDCardBackEvalResult">
+
+        select * from idCardBack where idNo=#{idNo};
+
+    </select>
+
+    <!--保存移动端性能监控报告结果-->
+    <insert id="appReportCpuInsert" parameterType="com.baidu.ocrqa.sdk.model.mysql.AppReportModel">
+        insert into appReport (
+        idNo,cpu,time,version)
+        values
+        (#{idNo},#{cpu},#{time},#{version})
+    </insert>
+    <insert id="appReportMemInsert" parameterType="com.baidu.ocrqa.sdk.model.mysql.AppReportModel">
+        insert into appReport (
+        idNo,mem,time,version)
+        values
+        (#{idNo},#{mem},#{time},#{version})
+    </insert>
+
+    <update id="updateAppReport" parameterType="com.baidu.ocrqa.sdk.model.mysql.AppReportModel">
+        update appReport
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="null != cpu and '' !=cpu">
+                cpu=#{cpu},
+            </if>
+            <if test="null != mem and '' !=mem">
+                mem=#{mem},
+            </if>
+            <if test="null != version and '' !=version">
+                version=#{version},
+            </if>
+            <if test="null != time and '' !=time">
+                time=#{time},
+            </if>
+        </trim>
+        where idNo=#{idNo};
+    </update>
+
+    <select id="getAppReportResult" parameterType="String" resultType="com.baidu.ocrqa.sdk.model.mysql.AppReportModel">
+
+        select * from appReport where idNo=#{idNo};
+
+    </select>
+
+
+    <select id="getAppReportResultList" parameterType="Map" resultType="com.baidu.ocrqa.sdk.model.mysql.AppReportModel">
+
+        select * from appReport where id &lt;=#{end} and id &gt;=#{start}
+        <trim prefix="and">
+            <if test="'cpu' == target">
+                cpu !='' or cpu != null
+            </if>
+            <if test="'mem' == target">
+                mem !='' or mem != null
+            </if>
+        </trim>
+
+        order by time desc;
+
+    </select>
+
+    <select id="getAppReportCount" parameterType="String" resultType="Integer">
+
+        select count(*) from appReport where idNo=#{idNo};
+
+    </select>
+
+
+    <insert id="insertFunctionTest" parameterType="com.baidu.ocrqa.sdk.model.param.function.FunctionTestParam">
+        insert into functionTest (
+        idNo,type,imgName,version)
+        values
+        (#{idNo},#{type},#{imgName},#{version})
+    </insert>
+
+
+    <insert id="insertFunctionTestResult" parameterType="com.baidu.ocrqa.sdk.model.mysql.function.FunctionTestResult">
+        insert into functionTestResult (
+        idNo,caseId,interfaceName,status,testTime,message,imgResult,time)
+        values
+        (#{idNo},#{caseId},#{interfaceName},#{status},#{testTime},#{message},#{imgResult},#{time})
+    </insert>
+
+    <select id="getFunctionTest" parameterType="String" resultType="com.baidu.ocrqa.sdk.model.mysql.function.FunctionTest">
+
+        select * from functionTest where idNo=#{idNo};
+
+    </select>
+
+    <select id="getFunctionTestCount" parameterType="String" resultType="Integer">
+
+        select count(*) from functionTest where idNo=#{idNo};
+
+    </select>
+
+    <select id="getFunctionTestList" parameterType="Map" resultType="com.baidu.ocrqa.sdk.model.mysql.function.FunctionTest">
+
+        select * from functionTest  where id &lt;=#{end} and id &gt;=#{start} order by id desc;
+
+    </select>
+
+    <select id="getFunctionTestResult" parameterType="String" resultType="com.baidu.ocrqa.sdk.model.mysql.function.FunctionTestResult">
+
+        select * from functionTestResult where idNo=#{idNo};
+
+    </select>
+
+    <select id="getFunctionTestResultList" parameterType="Map" resultType="com.baidu.ocrqa.sdk.model.mysql.function.FunctionTestResult">
+
+        select * from functionTestResult  where id &lt;=#{end} and id &gt;=#{start} and idNo = #{idNo} order by time desc;
+
+    </select>
+
+    <insert id="savePerformanceTestResult" parameterType="com.baidu.ocrqa.sdk.model.param.performance.PerformanceTestParam">
+        insert into PerformanceTestResult (
+        idNo,interfaceName,testImages,averageTime,successNumber,failNumber,totalNumber,time,version)
+        values
+        (#{idNo},#{interfaceName},#{testImages},#{averageTime},#{successNumber},#{failNumber},#{totalNumber},#{time},#{version})
+    </insert>
+
+    <select id="getPerformanceTestResult" parameterType="String" resultType="com.baidu.ocrqa.sdk.model.mysql.performance.PerformanceTestResult">
+
+        select * from PerformanceTestResult where idNo=#{idNo};
+
+    </select>
+    <select id="getPerformanceTestResultList" parameterType="Map" resultType="com.baidu.ocrqa.sdk.model.mysql.performance.PerformanceTestResult">
+
+        select * from PerformanceTestResult where id &lt;=#{end} and id &gt;=#{start} order by time desc;
+
+    </select>
+
+    <select id="getMaxTaskId" resultType="String">
+        select max(taskID) from project;
+    </select>
+
+
+    <insert id="insertProjectFile" parameterType="Map">
+
+        insert into project
+        (taskID,projectType,saveDir,
+        <if test='fileType == "model" '>
+            model
+        </if>
+        <if test='fileType == "libs" '>
+            libs
+        </if>
+        <if test='fileType == "md5" '>
+            md5
+        </if>
+        <if test='fileType == "demo" '>
+            demo
+        </if>
+        <if test='fileType == "license" '>
+            license
+        </if>
+        <if test='fileType == "so" '>
+            so
+        </if>
+        <if test='fileType == "jar" '>
+            jar
+        </if>
+        )
+        values (
+        #{taskID},
+        #{projectType},
+        #{saveDir},
+        #{fileName}
+        )
+
+    </insert>
+
+    <update id="updateProjectFile" parameterType="Map">
+
+        update project
+        set
+        <if test='fileType == "model" '>
+            model
+        </if>
+        <if test='fileType == "libs" '>
+            libs
+        </if>
+        <if test='fileType == "md5" '>
+            md5
+        </if>
+        <if test='fileType == "demo" '>
+            demo
+        </if>
+        <if test='fileType == "license" '>
+            license
+        </if>
+        <if test='fileType == "so" '>
+            so
+        </if>
+        <if test='fileType == "jar" '>
+            jar
+        </if>
+        = #{fileName}
+        where taskID= #{taskID} and projectType= #{projectType} and saveDir=#{saveDir}
+
+
+    </update>
+
+
+    <update id="updateProjectTableInfo" parameterType="Map">
+
+        update project
+        set
+        projectName = #{projectName},
+        projectDesc = #{projectDesc},
+        projectVersion = #{projectVersion},
+        projectBusiness = #{projectBusiness},
+        createTime = #{createTime}
+        where taskID= #{taskID} and projectType= #{projectType} and saveDir=#{saveDir}
+
+    </update>
+
+    <select id="getProjectTableInfo" parameterType="Map" resultType="com.baidu.ocrqa.sdk.model.mysql.project.ProjectTableInfoResult">
+
+        select * from project where id &lt;=#{end} and id &gt;=#{start} order by createTime desc;
+
+    </select>
+
+    <select id="getFilesForTaskID" parameterType="int" resultType="com.baidu.ocrqa.sdk.model.mysql.project.ProjectTableInfoResult">
+
+        select * from project where taskID = #{taskID};
+
+    </select>
+
+
+</mapper>

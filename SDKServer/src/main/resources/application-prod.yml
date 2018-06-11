@@ -1,0 +1,86 @@
+server:
+   port: 8808
+logging:
+    path: logs
+    file: sdk.log
+
+#   测试环境：java -jar SDK-Server-1.0-SNAPSHOT.jar --spring.profiles.active=test
+#   生产环境：java -jar SDK-Server-1.0-SNAPSHOT.jar --spring.profiles.active=prod
+#   生产服务器：10.94.243.104     work  idltest
+
+spring:
+   application:
+          name: sdk
+   datasource:
+       driver-class-name: com.mysql.jdbc.Driver
+       url: jdbc:mysql://10.100.46.162:8806/SDK
+       username: admin
+       password: 123456
+mybatis:
+    type-aliases-package: com.baidu.ocrqa.sdk.model
+    mapper-locations:
+       - mapper/*
+file:
+    #SDK调用识别结果存储路径
+    path: /home/work/sdkServer/eval/result
+    # 项目上传文件保存路径
+    project-file-save-path: /home/work/sdkServer/projectFile/
+    project-download-path: /projectFile/
+    project-absolute-path: /home/work/sdkServer/apache-tomcat-9.0.4/webapps/ROOT/projectFile/
+eval:
+    general:
+        no-position:
+            script: /home/work/sdkServer/eval/script-and-gt/generalNoPosition/script/eval_noposition.py
+            gt:
+                fengchao: /home/work/sdkServer/eval/script-and-gt/generalNoPosition/gt/fengchao
+                yinshua:
+                timu:
+                mix2923general:
+                kuaishou:
+        with-position:
+            script: /home/work/sdkServer/eval/script-and-gt/generalWithPosition/script/ocr_eval_word
+            gt:
+                fengchao: /home/work/sdkServer/eval/script-and-gt/generalWithPosition/gt/fengchao
+                yinshua:
+                timu:
+                mix2923general:
+                kuaishou:
+
+    idcard:
+        front:
+            script: /home/work/sdkServer/eval/script-and-gt/idCardFront/script/idcard_evaluator.py
+            gt:
+                qianbao-idcard-front: /home/work/sdkServer/eval/script-and-gt/idCardFront/gt/qianbao-idcard-front
+                qianbao-idcard-front-update:
+        back:
+            script: /home/work/sdkServer/eval/script-and-gt/idCardBack/script/idcard_evaluator.py
+            gt:
+                qianbao-idcard-back: /home/work/sdkServer/eval/script-and-gt/idCardBack/gt/qianbao-idcard-back
+
+
+image:
+    path:
+        function:
+            general: /sdkimg/function/general/001.jpg
+            idcard:
+                front:
+                back:
+        performance:
+            general: /sdkimg/performance/general/performance_500.zip
+            idcard:
+                front:
+                back:
+        stability:
+            general: /sdkimg/stability/general/stability_500.zip
+            idcard:
+                front:
+                back:
+        eval:
+            general:
+                withPosition:
+                noPosition:
+            idcard:
+                front:
+                back:
+    host: http://10.94.243.104:8080
+
